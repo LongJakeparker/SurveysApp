@@ -1,6 +1,7 @@
 package com.example.surveysapp.di
 
 import com.example.surveysapp.BuildConfig
+import com.example.surveysapp.SharedPreferencesManager
 import com.example.surveysapp.api.ApiService
 import com.example.surveysapp.other.Constant
 import dagger.Module
@@ -26,11 +27,11 @@ object RepoModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient() = OkHttpClient.Builder().apply {
+    fun provideOkHttpClient(sharedPreferencesManager: SharedPreferencesManager) = OkHttpClient.Builder().apply {
         addInterceptor { chain ->
             val original = chain.request()
             val request = original.newBuilder()
-                .header(Constant.AUTHORIZATION, "")
+                .header(Constant.AUTHORIZATION, sharedPreferencesManager.getAuthorization())
                 .method(original.method, original.body)
                 .build()
             val response = chain.proceed(request)
