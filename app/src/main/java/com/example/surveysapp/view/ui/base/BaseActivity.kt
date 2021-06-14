@@ -16,8 +16,8 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
     abstract val inflaterMethod: (LayoutInflater) -> T
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         binding = inflaterMethod.invoke(layoutInflater)
         setContentView(binding.root)
         onBindingReady()

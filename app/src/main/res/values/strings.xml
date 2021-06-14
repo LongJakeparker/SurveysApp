@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SurveysApp</string>
+
+    <string name="text_transition_logo">transition_logo</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="label_login">Log in</string>
+    <string name="text_login_fail">Incorrect email or password</string>
 </resources>
