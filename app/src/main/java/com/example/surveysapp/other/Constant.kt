@@ -16,4 +16,5 @@ object ApiKey {
     const val PASSWORD = "password"
     const val CLIENT_ID = "client_id"
     const val CLIENT_SECRET = "client_secret"
+    const val REFRESH_TOKEN = "refresh_token"
 }

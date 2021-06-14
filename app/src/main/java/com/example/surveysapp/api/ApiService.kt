@@ -4,6 +4,7 @@ import com.example.surveysapp.BuildConfig
 import com.example.surveysapp.entity.AuthEntity
 import com.example.surveysapp.entity.BaseEntity
 import com.example.surveysapp.other.ApiKey
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -20,6 +21,14 @@ interface ApiService {
                       @Field(ApiKey.PASSWORD) password: String,
                       @Field(ApiKey.GRANT_TYPE) grantType: String? = "password",
                       @Field(ApiKey.CLIENT_ID) clientId: String? = BuildConfig.client_id,
-                      @Field(ApiKey.CLIENT_SECRET) clientSecret: String? = BuildConfig.client_secret,
+                      @Field(ApiKey.CLIENT_SECRET) clientSecret: String? = BuildConfig.client_secret
     ): Response<BaseEntity<AuthEntity>>
+
+    @FormUrlEncoded
+    @POST("api/v1/oauth/token")
+    fun refreshToken(@Field(ApiKey.REFRESH_TOKEN) refreshToken: String,
+                     @Field(ApiKey.GRANT_TYPE) grantType: String? = "refresh_token",
+                     @Field(ApiKey.CLIENT_ID) clientId: String? = BuildConfig.client_id,
+                     @Field(ApiKey.CLIENT_SECRET) clientSecret: String? = BuildConfig.client_secret
+    ): Call<BaseEntity<AuthEntity>>
 }

@@ -19,6 +19,7 @@ class SharedPreferencesManager @Inject constructor(@ApplicationContext context :
         private const val PREF_KEY_TOKEN_TYPE = "pref_key_token_type"
         private const val PREF_KEY_ENCRYPTED_ACCESS_TOKEN = "pref_key_encrypted_access_token"
         private const val PREF_KEY_ENCRYPTED_REFRESH_TOKEN = "pref_key_encrypted_refresh_token"
+        private const val PREF_KEY_EXPIRED_TIME = "pref_key_expired_time"
     }
 
     private val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -35,6 +36,7 @@ class SharedPreferencesManager @Inject constructor(@ApplicationContext context :
         authAttributes.tokenType?.let { putTokenType(it) }
         authAttributes.accessToken?.let { putToken(PREF_KEY_ENCRYPTED_ACCESS_TOKEN, it) }
         authAttributes.refreshToken?.let { putToken(PREF_KEY_ENCRYPTED_REFRESH_TOKEN, it) }
+        authAttributes.expiresIn?.let { putExpireTime(it) }
     }
 
     /**
@@ -72,6 +74,23 @@ class SharedPreferencesManager @Inject constructor(@ApplicationContext context :
      */
     private fun getTokenType(): String? {
         return prefs.getString(PREF_KEY_TOKEN_TYPE, "")
+    }
+
+    /**
+     * Puts expired time
+     * @param expiredTime
+     */
+    private fun putExpireTime(expiredTime: Long) {
+        val editor = prefs.edit()
+        editor.putLong(PREF_KEY_EXPIRED_TIME, expiredTime)
+        editor.apply()
+    }
+
+    /**
+     * Gets expired time
+     */
+    fun getExpireTime(): Long {
+        return prefs.getLong(PREF_KEY_EXPIRED_TIME, 0)
     }
 
     /**

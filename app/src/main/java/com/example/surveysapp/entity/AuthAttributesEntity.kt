@@ -15,11 +15,11 @@ data class AuthAttributesEntity(
     val tokenType: String? = "",
 
     @SerializedName("expires_in")
-    val expiresIn: Int? = 0,
+    val expiresIn: Long? = 0,
 
     @SerializedName("refresh_token")
     val refreshToken: String? = "",
 
     @SerializedName("created_at")
-    val createdAt: Int? = 0
+    val createdAt: Long? = 0
 )

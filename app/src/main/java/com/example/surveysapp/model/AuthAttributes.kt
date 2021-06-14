@@ -7,7 +7,7 @@ package com.example.surveysapp.model
 data class AuthAttributes(
     val accessToken: String? = "",
     val tokenType: String? = "",
-    val expiresIn: Int? = 0,
+    val expiresIn: Long? = 0,
     val refreshToken: String? = "",
-    val createdAt: Int? = 0
+    val createdAt: Long? = 0
 )
