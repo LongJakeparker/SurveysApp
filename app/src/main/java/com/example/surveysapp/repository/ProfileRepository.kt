@@ -3,6 +3,7 @@ package com.example.surveysapp.repository
 import com.example.surveysapp.api.ApiService
 import com.example.surveysapp.entity.BaseEntity
 import com.example.surveysapp.entity.BaseException
+import com.example.surveysapp.entity.ProfileWrapperEntity
 import com.example.surveysapp.entity.SurveyWrapperEntity
 import com.google.gson.Gson
 import javax.inject.Inject
@@ -11,11 +12,11 @@ import javax.inject.Inject
  * @author longtran
  * @since 13/06/2021
  */
-class SurveyRepository @Inject constructor(
+class ProfileRepository @Inject constructor(
     private val apiService: ApiService
 ) {
-    suspend fun getSurveyList(pageNumber: Int? = null, pageSize: Int? = null): BaseEntity<List<SurveyWrapperEntity>> {
-        val response = apiService.getSurveyList(pageNumber, pageSize)
+    suspend fun getProfile(): BaseEntity<ProfileWrapperEntity> {
+        val response = apiService.getProfile()
 
         return if (response.isSuccessful) {
             response.body()!!

@@ -3,12 +3,12 @@ package com.example.surveysapp.api
 import com.example.surveysapp.BuildConfig
 import com.example.surveysapp.entity.AuthEntity
 import com.example.surveysapp.entity.BaseEntity
+import com.example.surveysapp.entity.ProfileWrapperEntity
+import com.example.surveysapp.entity.SurveyWrapperEntity
 import com.example.surveysapp.other.ApiKey
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 /**
  * @author longtran
@@ -31,4 +31,12 @@ interface ApiService {
                      @Field(ApiKey.CLIENT_ID) clientId: String? = BuildConfig.client_id,
                      @Field(ApiKey.CLIENT_SECRET) clientSecret: String? = BuildConfig.client_secret
     ): Call<BaseEntity<AuthEntity>>
+
+    @GET("api/v1/surveys")
+    suspend fun getSurveyList(@Query(ApiKey.PAGE_NUMBER) pageNumber: Int?,
+                              @Query(ApiKey.PAGE_SIZE) pageSize: Int?
+    ): Response<BaseEntity<List<SurveyWrapperEntity>>>
+
+    @GET("api/v1/me")
+    suspend fun getProfile(): Response<BaseEntity<ProfileWrapperEntity>>
 }

@@ -17,4 +17,6 @@ object ApiKey {
     const val CLIENT_ID = "client_id"
     const val CLIENT_SECRET = "client_secret"
     const val REFRESH_TOKEN = "refresh_token"
+    const val PAGE_NUMBER = "page[number]"
+    const val PAGE_SIZE = "page[size]"
 }
