@@ -1,6 +1,7 @@
 package com.example.surveysapp.di
 
 import android.content.Context
+import android.net.Uri
 import androidx.room.Room
 import com.example.surveysapp.BuildConfig
 import com.example.surveysapp.SharedPreferencesManager
@@ -86,31 +87,34 @@ object RepoModule {
                 .header(Constant.AUTHORIZATION, sharedPreferencesManager.getAuthorization())
                 .build()
 
-            // get expire time from shared preferences
-            val expireTime: Long = sharedPreferencesManager.getExpireTime()
-            val calendar = Calendar.getInstance()
-            val nowDate = calendar.time
-            calendar.timeInMillis = expireTime
-            val expireDate: Date = calendar.time
+            // Only check if this request is not for login or refresh token
+            if (Uri.parse(original.url.toString()).lastPathSegment != Constant.URL_SEGMENT_REFRESH_TOKEN) {
+                // get expire time from shared preferences
+                val expireTime: Long = sharedPreferencesManager.getExpireTime()
+                val calendar = Calendar.getInstance()
+                val nowDate = calendar.time
+                calendar.timeInMillis = expireTime
+                val expireDate: Date = calendar.time
 
-            val compareDateResult = nowDate.compareTo(expireDate)
+                val compareDateResult = expireDate.compareTo(nowDate)
 
-            if (compareDateResult == -1) {
-                val result =
-                    apiServiceHolder.apiService?.refreshToken(sharedPreferencesManager.getRefreshToken())
-                        ?.execute()
-                if (result!!.isSuccessful) {
-                    // refresh token is successful, we saved new token to storage.
-                    // Get your token from storage and set header
-                    val newAccessToken = result.body()?.data?.attributes?.run {
-                        sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(this))
-                        return@run accessToken
+                if (compareDateResult == -1) { // Token has expired
+                    val result =
+                        apiServiceHolder.apiService?.refreshToken(sharedPreferencesManager.getRefreshToken())
+                            ?.execute()
+                    if (result!!.isSuccessful) {
+                        // refresh token is successful, we saved new token to storage.
+                        // Get your token from storage and set header
+                        val newAccessToken = result.body()?.data?.attributes?.run {
+                            sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(this))
+                            return@run accessToken
+                        }
+
+                        // execute failed request again with new access token
+                        request = original.newBuilder()
+                            .header(Constant.AUTHORIZATION, newAccessToken ?: "")
+                            .build()
                     }
-
-                    // execute failed request again with new access token
-                    request = original.newBuilder()
-                        .header(Constant.AUTHORIZATION, newAccessToken ?: "")
-                        .build()
                 }
             }
 
