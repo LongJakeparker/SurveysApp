@@ -2,12 +2,9 @@ package com.example.surveysapp.view.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
-import com.example.surveysapp.R
 import com.example.surveysapp.SurveysApplication
 import com.example.surveysapp.databinding.FragmentHomeBinding
 import com.example.surveysapp.other.ViewState
@@ -30,7 +27,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private val sliderAdapter by lazy { SurveySlidePagerAdapter() }
 
     // Listener for cover page change event
-    private val coverPageChangeListener = object: ViewPager2.OnPageChangeCallback() {
+    private val coverPageChangeListener = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             // Update current item to bind to view
             val item = sliderAdapter.currentList[position]
@@ -60,8 +57,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             refreshLayout.setOnRefreshListener(refreshListener)
         }
 
-        // Prevents reload when back from backstack
-        if (viewModel.surveys.value == null) {
+        if (!Utils.isNetworkAvailable(SurveysApplication.instance.applicationContext)) {
+            viewModel.querySurveyFromLocal()
+        } else if (viewModel.surveys.value == null) { // Prevents reload when back from backstack
             viewModel.getSurveyList()
         }
 
@@ -99,7 +97,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     is ViewState.Error -> {
                         binding.refreshLayout.isRefreshing = false
                         setLoadingEnable(false)
-                        Toast.makeText(requireContext(), response.message, Toast.LENGTH_LONG).show()
+                        // Get local data if fetch from server was failed
+                        viewModel.querySurveyFromLocal()
                     }
                 }
             }

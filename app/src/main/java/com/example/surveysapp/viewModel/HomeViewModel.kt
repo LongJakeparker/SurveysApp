@@ -49,25 +49,15 @@ class HomeViewModel @Inject constructor(
         try {
             val response = surveyRepository.getSurveyList()
 
-            // Get profile from local
-            // Only fetch if null to reduce the requests call to server
-            val localProfile = sharedPreferencesManager.getProfile()
-            if (localProfile == null) {
-                val profileResponse = profileRepository.getProfile()
-                if (profileResponse.data != null) {
-                    val responseData = ProfileMapper.transform(profileResponse.data)
-                    _profile.postValue(responseData)
-                    sharedPreferencesManager.putProfile(responseData)
-                }
-            } else {
-                _profile.postValue(localProfile)
-            }
+            // Gets profile and binds
+            getProfile()
 
-            // Check if there is any error occur
+            // Checks if there is any error occur
             if (response.data != null) {
-                // Parse data and post value to view
+                // Parses data and posts value to view
                 val responseData = SurveyMapper.transformCollection(response.data)
                 _surveys.postValue(ViewState.Success(responseData))
+                updateToRoom(responseData)
             } else {
                 // Handles error
                 _surveys.postValue(ViewState.Error(response.error?.message))
@@ -76,6 +66,39 @@ class HomeViewModel @Inject constructor(
             // Handles exception
             _surveys.postValue(ViewState.Error(e.message))
         }
+    }
+
+    private suspend fun updateToRoom(responseData: List<Survey>) {
+        if (surveyRepository.getLocalSurveys().isNotEmpty()) {
+            surveyRepository.removeSurveys()
+        }
+
+        surveyRepository.insertSurveys(SurveyMapper.transformCollectionToRoom(responseData))
+    }
+
+    private suspend fun getProfile() {
+        // Only fetch if local data is null to reduce the requests call to server
+        val localProfile = sharedPreferencesManager.getProfile()
+        if (localProfile == null) {
+            val profileResponse = profileRepository.getProfile()
+            if (profileResponse.data != null) {
+                val responseData = ProfileMapper.transform(profileResponse.data)
+                _profile.postValue(responseData)
+                sharedPreferencesManager.putProfile(responseData)
+            }
+        } else {
+            _profile.postValue(localProfile)
+        }
+    }
+
+    /**
+     * Queries survey list from Room DB
+     */
+    fun querySurveyFromLocal() = viewModelScope.launch {
+        try {
+            val response = SurveyMapper.transformCollectionFromRoom(surveyRepository.getLocalSurveys())
+            _surveys.postValue(ViewState.Success(response))
+        } catch (e: Exception) {}
     }
 
     fun setCurrentItem(survey: Survey) {

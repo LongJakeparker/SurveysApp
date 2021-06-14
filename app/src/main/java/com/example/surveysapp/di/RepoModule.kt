@@ -1,14 +1,19 @@
 package com.example.surveysapp.di
 
+import android.content.Context
+import androidx.room.Room
 import com.example.surveysapp.BuildConfig
 import com.example.surveysapp.SharedPreferencesManager
 import com.example.surveysapp.api.ApiService
 import com.example.surveysapp.mapper.AuthAttributesMapper
 import com.example.surveysapp.other.ApiServiceHolder
 import com.example.surveysapp.other.Constant
+import com.example.surveysapp.room.AppDatabase
+import com.example.surveysapp.room.SurveyDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
@@ -142,5 +147,20 @@ object RepoModule {
         val apiService = retrofit.create(ApiService::class.java)
         apiServiceHolder.apiService = apiService
         return apiService
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
+        return Room.databaseBuilder(
+            appContext,
+            AppDatabase::class.java,
+            AppDatabase.DB_NAME
+        ).build()
+    }
+
+    @Provides
+    fun provideChannelDao(appDatabase: AppDatabase): SurveyDao {
+        return appDatabase.surveyDao()
     }
 }
