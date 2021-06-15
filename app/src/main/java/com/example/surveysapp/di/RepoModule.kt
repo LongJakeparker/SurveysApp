@@ -1,14 +1,20 @@
 package com.example.surveysapp.di
 
+import android.content.Context
+import android.net.Uri
+import androidx.room.Room
 import com.example.surveysapp.BuildConfig
 import com.example.surveysapp.SharedPreferencesManager
 import com.example.surveysapp.api.ApiService
 import com.example.surveysapp.mapper.AuthAttributesMapper
 import com.example.surveysapp.other.ApiServiceHolder
 import com.example.surveysapp.other.Constant
+import com.example.surveysapp.room.AppDatabase
+import com.example.surveysapp.room.SurveyDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
@@ -36,7 +42,6 @@ object RepoModule {
     ) = object : Authenticator {
         @Synchronized
         override fun authenticate(route: Route?, response: Response): Request? {
-
             val currentToken = sharedPreferencesManager.getAuthorization()
 
             if (response.request.header(Constant.AUTHORIZATION) != sharedPreferencesManager.getAuthorization()) {
@@ -51,15 +56,14 @@ object RepoModule {
 
             return if (result!!.isSuccessful) {
                 // refresh token is successful, we saved new token to storage.
-                // Get your token from storage and set header
-                val newAccessToken = result.body()?.data?.attributes?.run {
-                    sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(this))
-                    return@run accessToken
+                // Get token from storage and set header
+                result.body()?.data?.attributes?.let {
+                    sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(it))
                 }
 
                 // execute failed request again with new access token
                 response.request.newBuilder()
-                    .header(Constant.AUTHORIZATION, newAccessToken ?: "")
+                    .header(Constant.AUTHORIZATION, sharedPreferencesManager.getAuthorization())
                     .build()
             } else {
                 // Logout user
@@ -81,31 +85,36 @@ object RepoModule {
                 .header(Constant.AUTHORIZATION, sharedPreferencesManager.getAuthorization())
                 .build()
 
-            // get expire time from shared preferences
-            val expireTime: Long = sharedPreferencesManager.getExpireTime()
-            val calendar = Calendar.getInstance()
-            val nowDate = calendar.time
-            calendar.timeInMillis = expireTime
-            val expireDate: Date = calendar.time
+            // Only check if this request is not for login or refresh token
+            if (Uri.parse(original.url.toString()).lastPathSegment != Constant.URL_SEGMENT_REFRESH_TOKEN) {
+                // get expire time from shared preferences
+                val expireTime: Long = sharedPreferencesManager.getExpireTime()
+                val calendar = Calendar.getInstance()
+                val nowDate = calendar.time
+                calendar.timeInMillis = expireTime
+                val expireDate: Date = calendar.time
 
-            val compareDateResult = nowDate.compareTo(expireDate)
+                val compareDateResult = expireDate.compareTo(nowDate)
 
-            if (compareDateResult == -1) {
-                val result =
-                    apiServiceHolder.apiService?.refreshToken(sharedPreferencesManager.getRefreshToken())
-                        ?.execute()
-                if (result!!.isSuccessful) {
-                    // refresh token is successful, we saved new token to storage.
-                    // Get your token from storage and set header
-                    val newAccessToken = result.body()?.data?.attributes?.run {
-                        sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(this))
-                        return@run accessToken
+                if (compareDateResult == -1) { // Token has expired
+                    val result =
+                        apiServiceHolder.apiService?.refreshToken(sharedPreferencesManager.getRefreshToken())
+                            ?.execute()
+                    if (result!!.isSuccessful) {
+                        // refresh token is successful, we saved new token to storage.
+                        // Get token from storage and set header
+                        result.body()?.data?.attributes?.let {
+                            sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(it))
+                        }
+
+                        // execute failed request again with new access token
+                        request = original.newBuilder()
+                            .header(
+                                Constant.AUTHORIZATION,
+                                sharedPreferencesManager.getAuthorization()
+                            )
+                            .build()
                     }
-
-                    // execute failed request again with new access token
-                    request = original.newBuilder()
-                        .header(Constant.AUTHORIZATION, newAccessToken ?: "")
-                        .build()
                 }
             }
 
@@ -142,5 +151,20 @@ object RepoModule {
         val apiService = retrofit.create(ApiService::class.java)
         apiServiceHolder.apiService = apiService
         return apiService
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
+        return Room.databaseBuilder(
+            appContext,
+            AppDatabase::class.java,
+            AppDatabase.DB_NAME
+        ).build()
+    }
+
+    @Provides
+    fun provideChannelDao(appDatabase: AppDatabase): SurveyDao {
+        return appDatabase.surveyDao()
     }
 }

@@ -7,6 +7,7 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.example.surveysapp.R
 
 
 /**
@@ -19,6 +20,8 @@ fun setAvatarUrl(imageView: ImageView, url: String?) {
     imageView.load(url) {
         crossfade(true)
         transformations(CircleCropTransformation())
+        placeholder(R.drawable.ic_default_user)
+        error(R.drawable.ic_default_user)
     }
 }
 

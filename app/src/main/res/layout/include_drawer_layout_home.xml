@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.surveysapp.viewModel.HomeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clDrawerContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@color/background_drawer_layout"
+        android:onClick="@{null}"
+        android:paddingVertical="@dimen/view_dimen_ml"
+        android:paddingStart="@dimen/view_dimen_ml"
+        android:paddingEnd="0dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvProfileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/view_dimen_l"
+            android:layout_marginEnd="@dimen/view_dimen_s"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{viewModel.profile.email}"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_xxxlarge"
+            android:textStyle="bold"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/ivAvatarMenu"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Longtmh0612" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivAvatarMenu"
+            android:layout_width="@dimen/size_avatar"
+            android:layout_height="@dimen/size_avatar"
+            android:layout_marginEnd="@dimen/view_dimen_m"
+            android:avatarUrl="@{viewModel.profile.avatarUrl}"
+            android:padding="@dimen/view_dimen_s"
+            android:translationY="-2dp"
+            app:layout_constraintBottom_toBottomOf="@id/tvProfileName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvProfileName" />
+
+        <View
+            android:id="@+id/menuDivider"
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_marginTop="@dimen/view_dimen_ml"
+            android:layout_marginEnd="@dimen/view_dimen_ml"
+            android:background="@color/grey_blue_60"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvProfileName" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvLogout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/view_dimen_ml"
+            android:layout_marginEnd="@dimen/view_dimen_ml"
+            android:onClick="@{viewModel.onClickLogoutListener}"
+            android:paddingVertical="@dimen/view_dimen_s"
+            android:text="@string/label_logout"
+            android:textColor="@color/white_70"
+            android:textSize="@dimen/text_size_large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/menuDivider" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

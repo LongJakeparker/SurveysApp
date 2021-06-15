@@ -6,4 +6,8 @@
     <string name="hint_password">Password</string>
     <string name="label_login">Log in</string>
     <string name="text_login_fail">Incorrect email or password</string>
+    <string name="label_today">Today</string>
+    <string name="label_logout">Logout</string>
+    <string name="message_logout">Are you sure you want to log out?</string>
+    <string name="label_cancel">Cancel</string>
 </resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.surveysapp.viewModel.HomeViewModel" />
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerLayoutRight"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/includeHome"
+            layout="@layout/include_home"
+            app:viewModel="@{viewModel}" />
+
+        <include
+            android:id="@+id/includeDrawer"
+            layout="@layout/include_drawer_layout_home"
+            app:viewModel="@{viewModel}" />
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+
+</layout>

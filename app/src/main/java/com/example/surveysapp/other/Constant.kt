@@ -7,6 +7,7 @@ package com.example.surveysapp.other
 object Constant {
     const val BASE_URL = "https://survey-api.nimblehq.co/"
     const val AUTHORIZATION = "Authorization"
+    const val URL_SEGMENT_REFRESH_TOKEN = "token"
 }
 
 // Constant string of API keys
@@ -17,4 +18,8 @@ object ApiKey {
     const val CLIENT_ID = "client_id"
     const val CLIENT_SECRET = "client_secret"
     const val REFRESH_TOKEN = "refresh_token"
+    const val TOKEN = "token"
+    const val USER = "user"
+    const val PAGE_NUMBER = "page[number]"
+    const val PAGE_SIZE = "page[size]"
 }

@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.ActivityOptions
 import android.content.Intent
+import android.os.Handler
 import android.util.Pair
 import android.view.LayoutInflater
 import android.view.View
@@ -50,7 +51,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     }
 
     private fun navigateToMain() {
-        MainActivity.start(this)
+        // Needs delay a little bit because the animation finish too fast if don't have shared element
+        Handler(mainLooper).postDelayed({
+            MainActivity.start(this)
+        }, 1000)
     }
 
     private fun navigateToLogin() {
