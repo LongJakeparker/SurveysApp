@@ -57,15 +57,14 @@ object RepoModule {
 
             return if (result!!.isSuccessful) {
                 // refresh token is successful, we saved new token to storage.
-                // Get your token from storage and set header
-                val newAccessToken = result.body()?.data?.attributes?.run {
-                    sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(this))
-                    return@run accessToken
+                // Get token from storage and set header
+                result.body()?.data?.attributes?.let {
+                    sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(it))
                 }
 
                 // execute failed request again with new access token
                 response.request.newBuilder()
-                    .header(Constant.AUTHORIZATION, newAccessToken ?: "")
+                    .header(Constant.AUTHORIZATION, sharedPreferencesManager.getAuthorization())
                     .build()
             } else {
                 // Logout user
@@ -104,15 +103,14 @@ object RepoModule {
                             ?.execute()
                     if (result!!.isSuccessful) {
                         // refresh token is successful, we saved new token to storage.
-                        // Get your token from storage and set header
-                        val newAccessToken = result.body()?.data?.attributes?.run {
-                            sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(this))
-                            return@run accessToken
+                        // Get token from storage and set header
+                        result.body()?.data?.attributes?.let {
+                            sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(it))
                         }
 
                         // execute failed request again with new access token
                         request = original.newBuilder()
-                            .header(Constant.AUTHORIZATION, newAccessToken ?: "")
+                            .header(Constant.AUTHORIZATION, sharedPreferencesManager.getAuthorization())
                             .build()
                     }
                 }
