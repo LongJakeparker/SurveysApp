@@ -14,14 +14,13 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivBack"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:rotation="180"
-            app:srcCompat="@drawable/ic_next_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_back"
+            android:padding="@dimen/view_dimen_s"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="@dimen/view_dimen_s"
-            android:layout_marginTop="@dimen/view_dimen_m"/>
+            android:layout_margin="@dimen/view_dimen_m"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"

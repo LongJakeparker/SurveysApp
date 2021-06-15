@@ -43,13 +43,8 @@ interface ApiService {
         @Field(ApiKey.CLIENT_SECRET) clientSecret: String? = BuildConfig.client_secret
     ): Response<ResponseBody>
 
-    @FormUrlEncoded
     @POST("api/v1/passwords")
-    suspend fun forgotPassword(
-        @Field(ApiKey.USER) user: HashMap<String, String>,
-        @Field(ApiKey.CLIENT_ID) clientId: String? = BuildConfig.client_id,
-        @Field(ApiKey.CLIENT_SECRET) clientSecret: String? = BuildConfig.client_secret
-    ): Response<ResponseBody>
+    suspend fun forgotPassword(@Body params: HashMap<String, Any>): Response<ResponseBody>
 
     @GET("api/v1/surveys")
     suspend fun getSurveyList(

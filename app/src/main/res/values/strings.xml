@@ -5,9 +5,14 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="label_login">Log in</string>
+    <string name="label_reset">Reset</string>
+    <string name="label_reset_guide">Enter your email to receive instructions for resetting your password.</string>
+    <string name="reset_email_sent">A reset email has been sent</string>
     <string name="text_login_fail">Incorrect email or password</string>
     <string name="label_today">Today</string>
     <string name="label_logout">Logout</string>
     <string name="message_logout">Are you sure you want to log out?</string>
     <string name="label_cancel">Cancel</string>
+    <string name="label_forgot">Forgot?</string>
+    <string name="label_something_went_wrong">Sorry, something went wrong</string>
 </resources>

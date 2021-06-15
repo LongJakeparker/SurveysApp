@@ -79,6 +79,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                 val password = binding.etPassword.text.toString().trim()
                 binding.btnLogin.isEnabled = email.isValidEmail() && password.isNotEmpty()
             }
+
+            eventClickReset.observe(this@LoginActivity) {
+                ForgotPasswordActivity.start(this@LoginActivity)
+            }
         }
     }
 

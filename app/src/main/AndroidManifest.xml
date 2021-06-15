@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.ui.LoginActivity"/>
+        <activity android:name=".view.ui.ForgotPasswordActivity"/>
         <activity android:name=".view.ui.MainActivity"/>
     </application>
 

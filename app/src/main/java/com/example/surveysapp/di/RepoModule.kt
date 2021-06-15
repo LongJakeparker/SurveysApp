@@ -89,31 +89,33 @@ object RepoModule {
             if (Uri.parse(original.url.toString()).lastPathSegment != Constant.URL_SEGMENT_REFRESH_TOKEN) {
                 // get expire time from shared preferences
                 val expireTime: Long = sharedPreferencesManager.getExpireTime()
-                val calendar = Calendar.getInstance()
-                val nowDate = calendar.time
-                calendar.timeInMillis = expireTime
-                val expireDate: Date = calendar.time
+                if (expireTime > 0) {
+                    val calendar = Calendar.getInstance()
+                    val nowDate = calendar.time
+                    calendar.timeInMillis = expireTime
+                    val expireDate: Date = calendar.time
 
-                val compareDateResult = expireDate.compareTo(nowDate)
+                    val compareDateResult = expireDate.compareTo(nowDate)
 
-                if (compareDateResult == -1) { // Token has expired
-                    val result =
-                        apiServiceHolder.apiService?.refreshToken(sharedPreferencesManager.getRefreshToken())
-                            ?.execute()
-                    if (result!!.isSuccessful) {
-                        // refresh token is successful, we saved new token to storage.
-                        // Get token from storage and set header
-                        result.body()?.data?.attributes?.let {
-                            sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(it))
+                    if (compareDateResult == -1) { // Token has expired
+                        val result =
+                            apiServiceHolder.apiService?.refreshToken(sharedPreferencesManager.getRefreshToken())
+                                ?.execute()
+                        if (result!!.isSuccessful) {
+                            // refresh token is successful, we saved new token to storage.
+                            // Get token from storage and set header
+                            result.body()?.data?.attributes?.let {
+                                sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(it))
+                            }
+
+                            // execute failed request again with new access token
+                            request = original.newBuilder()
+                                .header(
+                                    Constant.AUTHORIZATION,
+                                    sharedPreferencesManager.getAuthorization()
+                                )
+                                .build()
                         }
-
-                        // execute failed request again with new access token
-                        request = original.newBuilder()
-                            .header(
-                                Constant.AUTHORIZATION,
-                                sharedPreferencesManager.getAuthorization()
-                            )
-                            .build()
                     }
                 }
             }
