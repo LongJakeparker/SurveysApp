@@ -1,25 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/light_black"/>
+    <corners android:radius="@dimen/view_dimen_ms"/>
 
-<item android:state_enabled="false">
-    <shape>
-        <solid android:color="@color/grey_disable" />
-        <corners android:radius="@dimen/view_dimen_ms" />
-
-    </shape>
-
-</item>
-
-<item>
-    <shape>
-
-        <solid android:color="@color/light_black"/>
-        <corners android:radius="@dimen/view_dimen_ms"/>
-
-    </shape>
-
-</item>
-
-
-</selector>
+</shape>

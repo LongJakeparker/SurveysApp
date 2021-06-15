@@ -42,7 +42,6 @@ object RepoModule {
     ) = object : Authenticator {
         @Synchronized
         override fun authenticate(route: Route?, response: Response): Request? {
-
             val currentToken = sharedPreferencesManager.getAuthorization()
 
             if (response.request.header(Constant.AUTHORIZATION) != sharedPreferencesManager.getAuthorization()) {
@@ -110,7 +109,10 @@ object RepoModule {
 
                         // execute failed request again with new access token
                         request = original.newBuilder()
-                            .header(Constant.AUTHORIZATION, sharedPreferencesManager.getAuthorization())
+                            .header(
+                                Constant.AUTHORIZATION,
+                                sharedPreferencesManager.getAuthorization()
+                            )
                             .build()
                     }
                 }

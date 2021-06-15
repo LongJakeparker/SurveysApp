@@ -2,12 +2,14 @@ package com.example.surveysapp.util
 
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
+import com.example.surveysapp.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -55,5 +57,17 @@ object Utils {
         } else {
             return connectivityManager.activeNetworkInfo?.isConnected ?: false
         }
+    }
+
+    fun showLogoutMessage(context: Context, onclick: DialogInterface.OnClickListener) {
+        AlertDialog.Builder(context)
+            .setMessage(R.string.message_logout)
+            .setCancelable(false)
+            .setPositiveButton(R.string.label_logout) { dialog, which ->
+                onclick.onClick(dialog, which)
+            }
+            .setNegativeButton(R.string.label_cancel) { dialog, _ ->
+                dialog.dismiss()
+            }.show()
     }
 }

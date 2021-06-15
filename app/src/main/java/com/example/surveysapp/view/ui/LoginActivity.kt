@@ -1,5 +1,7 @@
 package com.example.surveysapp.view.ui
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -22,6 +24,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     private val viewModel by viewModels<LoginViewModel>()
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, LoginActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 
     override val inflaterMethod: (LayoutInflater) -> ActivityLoginBinding
         get() = ActivityLoginBinding::inflate

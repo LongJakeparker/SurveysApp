@@ -23,4 +23,5 @@
     <dimen name="logo_width_login">200dp</dimen>
     <dimen name="indicator_size">4dp</dimen>
     <dimen name="height_loading_holder_view">18dp</dimen>
+    <dimen name="size_avatar">50dp</dimen>
 </resources>

@@ -20,6 +20,7 @@ fun setAvatarUrl(imageView: ImageView, url: String?) {
     imageView.load(url) {
         crossfade(true)
         transformations(CircleCropTransformation())
+        placeholder(R.drawable.ic_default_user)
         error(R.drawable.ic_default_user)
     }
 }

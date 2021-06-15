@@ -53,9 +53,11 @@ class SharedPreferencesManager @Inject constructor(@ApplicationContext context: 
      *  - refresh token
      */
     fun clearSignInData() {
-        removeToken(PREF_KEY_ENCRYPTED_ACCESS_TOKEN)
-        removeToken(PREF_KEY_ENCRYPTED_REFRESH_TOKEN)
-        removeTokenType()
+        remove(PREF_KEY_ENCRYPTED_ACCESS_TOKEN)
+        remove(PREF_KEY_ENCRYPTED_REFRESH_TOKEN)
+        remove(PREF_KEY_TOKEN_TYPE)
+        remove(PREF_KEY_EXPIRED_TIME)
+        remove(PREF_KEY_PROFILE)
     }
 
     /**
@@ -100,15 +102,6 @@ class SharedPreferencesManager @Inject constructor(@ApplicationContext context: 
     }
 
     /**
-     * Removes token type
-     */
-    private fun removeTokenType() {
-        val editor = prefs.edit()
-        editor.remove(PREF_KEY_TOKEN_TYPE)
-        editor.apply()
-    }
-
-    /**
      * Encrypts and puts user's sensitive token
      * @param key
      * @param token
@@ -116,16 +109,6 @@ class SharedPreferencesManager @Inject constructor(@ApplicationContext context: 
     private fun putToken(key: String, token: String) {
         val editor = prefs.edit()
         editor.putString(key, AESCrypt.encrypt(token, TOKEN_CRYPT_KEY))
-        editor.apply()
-    }
-
-    /**
-     * Removes user's sensitive token
-     * @param key
-     */
-    private fun removeToken(key: String) {
-        val editor = prefs.edit()
-        editor.remove(key)
         editor.apply()
     }
 
@@ -166,5 +149,15 @@ class SharedPreferencesManager @Inject constructor(@ApplicationContext context: 
         Gson().fromJson(prefs.getString(PREF_KEY_PROFILE, null), Profile::class.java)
     } else {
         null
+    }
+
+    /**
+     * Removes key from sharedPref
+     * @param key
+     */
+    private fun remove(key: String) {
+        val editor = prefs.edit()
+        editor.remove(key)
+        editor.apply()
     }
 }
