@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false">
+        <shape>
+            <solid android:color="@color/grey_disable" />
+            <corners android:radius="@dimen/view_dimen_ms" />
 
-    <solid android:color="@color/light_black"/>
-    <corners android:radius="@dimen/view_dimen_ms"/>
+        </shape>
+    </item>
 
-</shape>
+    <item>
+        <shape>
+
+            <solid android:color="@color/light_black" />
+            <corners android:radius="@dimen/view_dimen_ms" />
+
+        </shape>
+    </item>
+</selector>
