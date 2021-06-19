@@ -99,10 +99,6 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun updateToRoom(responseData: List<Survey>) {
-        if (surveyRepository.getLocalSurveys().isNotEmpty()) {
-            surveyRepository.removeSurveys()
-        }
-
         surveyRepository.insertSurveys(responseData.toRoomEntityList())
     }
 
