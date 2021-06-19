@@ -1,9 +1,6 @@
 package com.example.surveysapp.room
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 /**
  * @author longtran
@@ -11,11 +8,25 @@ import androidx.room.Query
  */
 @Dao
 interface SurveyDao {
+
     @Query("SELECT * FROM ${SurveyRoomEntity.TABLE_NAME}")
-    suspend fun getAllIssues(): List<SurveyRoomEntity>
+    suspend fun getAllSurveys(): List<SurveyRoomEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllIssues(surveys: List<SurveyRoomEntity?>?)
+    suspend fun insertAllSurveys(surveys: List<SurveyRoomEntity?>?)
+
+    @Query("SELECT * FROM ${SurveyRoomEntity.TABLE_NAME} LIMIT 1")
+    suspend fun getSurvey(): SurveyRoomEntity?
+
+    @Transaction
+    suspend fun insertSurveys(surveys: List<SurveyRoomEntity?>?, isLoadMore: Boolean = false){
+        // If table is empty or loading more data then don't need to clear the table
+        if (getSurvey() != null && !isLoadMore) {
+            removeAll()
+        }
+
+        insertAllSurveys(surveys)
+    }
 
     @Query("DELETE FROM ${SurveyRoomEntity.TABLE_NAME}")
     suspend fun removeAll()

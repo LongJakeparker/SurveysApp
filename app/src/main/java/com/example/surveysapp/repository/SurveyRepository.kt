@@ -39,7 +39,7 @@ class SurveyRepository @Inject constructor(
      * @return List<IssueEntity>
      */
     suspend fun getLocalSurveys(): List<SurveyRoomEntity> {
-        return surveyDao.getAllIssues()
+        return surveyDao.getAllSurveys()
     }
 
     /**
@@ -47,7 +47,7 @@ class SurveyRepository @Inject constructor(
      * @param issues
      */
     suspend fun insertSurveys(issues: List<SurveyRoomEntity?>?) {
-        return surveyDao.insertAllIssues(issues)
+        return surveyDao.insertSurveys(issues)
     }
 
     /**
