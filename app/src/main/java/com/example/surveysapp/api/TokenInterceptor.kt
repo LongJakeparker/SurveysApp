@@ -1,7 +1,7 @@
 package com.example.surveysapp.api
 
 import com.example.surveysapp.SharedPreferencesManager
-import com.example.surveysapp.mapper.AuthAttributesMapper
+import com.example.surveysapp.entity.toModel
 import com.example.surveysapp.other.Constant
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -43,7 +43,7 @@ class TokenInterceptor @Inject constructor(
                     // refresh token is successful, we saved new token to storage.
                     // Get token from storage and set header
                     result.body()?.data?.attributes?.let {
-                        sharedPreferencesManager.putSignInData(AuthAttributesMapper.transform(it))
+                        sharedPreferencesManager.putSignInData(it.toModel())
                     }
 
                     // execute failed request again with new access token
