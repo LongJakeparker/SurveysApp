@@ -3,10 +3,8 @@ package com.example.surveysapp.view.ui
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
-import android.widget.Toast
 import androidx.activity.viewModels
 import com.example.surveysapp.R
-import com.example.surveysapp.SharedPreferencesManager
 import com.example.surveysapp.databinding.ActivityLoginBinding
 import com.example.surveysapp.other.ViewState
 import com.example.surveysapp.other.isValidEmail
