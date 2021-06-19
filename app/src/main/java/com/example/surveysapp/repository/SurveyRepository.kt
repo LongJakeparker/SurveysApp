@@ -1,6 +1,6 @@
 package com.example.surveysapp.repository
 
-import com.example.surveysapp.api.ApiService
+import com.example.surveysapp.api.AuthApiService
 import com.example.surveysapp.entity.BaseEntity
 import com.example.surveysapp.entity.BaseException
 import com.example.surveysapp.entity.SurveyWrapperEntity
@@ -14,7 +14,7 @@ import javax.inject.Inject
  * @since 13/06/2021
  */
 class SurveyRepository @Inject constructor(
-    private val apiService: ApiService,
+    private val authApiService: AuthApiService,
     private val surveyDao: SurveyDao
 ) {
     /**
@@ -23,7 +23,7 @@ class SurveyRepository @Inject constructor(
      * @param pageSize
      */
     suspend fun getSurveyList(pageNumber: Int? = null, pageSize: Int? = null): BaseEntity<List<SurveyWrapperEntity>> {
-        val response = apiService.getSurveyList(pageNumber, pageSize)
+        val response = authApiService.getSurveyList(pageNumber, pageSize)
 
         return if (response.isSuccessful) {
             response.body()!!

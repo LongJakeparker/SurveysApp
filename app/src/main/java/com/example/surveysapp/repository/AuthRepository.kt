@@ -2,7 +2,7 @@ package com.example.surveysapp.repository
 
 import com.example.surveysapp.BuildConfig
 import com.example.surveysapp.SharedPreferencesManager
-import com.example.surveysapp.api.ApiService
+import com.example.surveysapp.api.NonAuthApiService
 import com.example.surveysapp.entity.AuthEntity
 import com.example.surveysapp.entity.BaseEntity
 import com.example.surveysapp.entity.BaseException
@@ -15,11 +15,11 @@ import javax.inject.Inject
  * @since 13/06/2021
  */
 class AuthRepository @Inject constructor(
-    private val apiService: ApiService,
+    private val nonAuthApiService: NonAuthApiService,
     private val sharedPreferencesManager: SharedPreferencesManager
 ) {
     suspend fun login(email: String, password: String): BaseEntity<AuthEntity> {
-        val response = apiService.login(email = email, password = password)
+        val response = nonAuthApiService.login(email = email, password = password)
 
         return if (response.isSuccessful) {
             response.body()!!
@@ -32,7 +32,7 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun logout(): BaseEntity<Boolean> {
-        val response = apiService.logout(sharedPreferencesManager.getAccessToken())
+        val response = nonAuthApiService.logout(sharedPreferencesManager.getAccessToken())
 
         return if (response.isSuccessful) {
             BaseEntity(true, null)
@@ -53,7 +53,7 @@ class AuthRepository @Inject constructor(
         params[ApiKey.CLIENT_ID] = BuildConfig.client_id
         params[ApiKey.CLIENT_SECRET] = BuildConfig.client_secret
 
-        val response = apiService.forgotPassword(params)
+        val response = nonAuthApiService.forgotPassword(params)
 
         return if (response.isSuccessful) {
             BaseEntity(true, null)

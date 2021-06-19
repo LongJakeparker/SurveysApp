@@ -1,5 +1,6 @@
 package com.example.surveysapp.view.ui
 
+import android.content.Context
 import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +21,9 @@ import com.example.surveysapp.view.ui.base.BaseFragment
 import com.example.surveysapp.viewModel.HomeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
 
 
 /**
@@ -30,6 +33,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
+
+    @Inject
+    @ApplicationContext
+    lateinit var applicationContext: Context
+
     private val viewModel by viewModels<HomeViewModel>()
     private val sliderAdapter by lazy { SurveySlidePagerAdapter() }
 
@@ -49,7 +57,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     // Listener for pull to refresh event
     private val refreshListener = SwipeRefreshLayout.OnRefreshListener {
         // Only fetch when internet connection is available
-        if (Utils.isNetworkAvailable(SurveysApplication.instance.applicationContext)) {
+        if (Utils.isNetworkAvailable(applicationContext)) {
             viewModel.getSurveyList()
         } else {
             binding.includeHome.refreshLayout.isRefreshing = false
@@ -70,7 +78,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             }
         }
 
-        if (!Utils.isNetworkAvailable(SurveysApplication.instance.applicationContext)) {
+        if (!Utils.isNetworkAvailable(applicationContext)) {
             viewModel.querySurveyFromLocal()
         } else if (viewModel.surveys.value == null) { // Prevents reload when back from backstack
             viewModel.getSurveyList()
