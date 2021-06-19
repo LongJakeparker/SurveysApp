@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.example.surveysapp.R
-import com.example.surveysapp.SurveysApplication
 import com.example.surveysapp.databinding.FragmentHomeBinding
 import com.example.surveysapp.other.ViewState
 import com.example.surveysapp.util.Utils

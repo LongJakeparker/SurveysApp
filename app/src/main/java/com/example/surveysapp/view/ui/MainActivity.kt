@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.surveysapp.databinding.ActivityMainBinding
 import com.example.surveysapp.view.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
