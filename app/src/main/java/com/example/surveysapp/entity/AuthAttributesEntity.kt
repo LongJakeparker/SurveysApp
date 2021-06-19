@@ -1,5 +1,6 @@
 package com.example.surveysapp.entity
 
+import com.example.surveysapp.model.AuthAttributes
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -23,3 +24,16 @@ data class AuthAttributesEntity(
     @SerializedName("created_at")
     val createdAt: Long? = 0
 )
+
+/**
+ * Extension converts from entity to AuthAttributes model
+ */
+fun AuthAttributesEntity?.toModel() = (this?.run {
+    AuthAttributes(
+        accessToken,
+        tokenType,
+        expiresIn,
+        refreshToken,
+        createdAt
+    )
+} ?: AuthAttributes())

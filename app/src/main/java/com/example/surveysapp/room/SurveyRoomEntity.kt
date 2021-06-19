@@ -3,6 +3,7 @@ package com.example.surveysapp.room
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.surveysapp.model.Survey
 import com.example.surveysapp.room.SurveyRoomEntity.Companion.TABLE_NAME
 
 /**
@@ -25,3 +26,21 @@ data class SurveyRoomEntity(
         const val TABLE_NAME = "survey"
     }
 }
+
+/**
+ * Extension converts from Room entity to Survey model
+ */
+fun SurveyRoomEntity?.toModel() = (this?.run {
+    Survey(
+        id,
+        title,
+        description,
+        coverImageUrl
+    )
+} ?: Survey())
+
+/**
+ * Extension converts from Room entity list to Survey model list
+ */
+fun List<SurveyRoomEntity?>?.toModelList() = this?.map { surveyEntity -> surveyEntity.toModel() }
+    ?: ArrayList()

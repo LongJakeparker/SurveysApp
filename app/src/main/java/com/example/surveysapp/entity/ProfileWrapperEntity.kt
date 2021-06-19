@@ -1,5 +1,6 @@
 package com.example.surveysapp.entity
 
+import com.example.surveysapp.model.Profile
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -16,3 +17,14 @@ data class ProfileWrapperEntity(
     @SerializedName("attributes")
     val attributes: ProfileEntity? = null
 )
+
+/**
+ * Extension converts from entity to Profile model
+ */
+fun ProfileWrapperEntity?.toModel() = (this?.run {
+    Profile(
+        id.orEmpty(),
+        attributes?.email,
+        attributes?.avatarUrl
+    )
+} ?: Profile())

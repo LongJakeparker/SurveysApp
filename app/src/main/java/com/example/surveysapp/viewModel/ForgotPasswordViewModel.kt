@@ -34,30 +34,30 @@ class ForgotPasswordViewModel @Inject constructor(
     val isEnableLoading: LiveData<Boolean> = _isEnableLoading
 
     //The single LiveData represents for click events
-    private val _eventClickReset by lazy { SingleEventLiveData<Int>() }
-    val eventClickReset: LiveData<Int> = _eventClickReset
+    private val _eventClickReset by lazy { SingleEventLiveData<Unit>() }
+    val eventClickReset: LiveData<Unit> = _eventClickReset
 
-    private val _eventClickBack by lazy { SingleEventLiveData<Int>() }
-    val eventClickBack: LiveData<Int> = _eventClickBack
+    private val _eventClickBack by lazy { SingleEventLiveData<Unit>() }
+    val eventClickBack: LiveData<Unit> = _eventClickBack
 
-    private val _eventTextFieldChanged by lazy { SingleEventLiveData<Int>() }
-    val eventTextFieldChanged: LiveData<Int> = _eventTextFieldChanged
+    private val _eventTextFieldChanged by lazy { SingleEventLiveData<Unit>() }
+    val eventTextFieldChanged: LiveData<Unit> = _eventTextFieldChanged
 
     //On-click events are set to view through data-binding
     //Sets LiveData value to notify to Fragment/Activity
     val clickResetListener = View.OnClickListener {
-        _eventClickReset.setValue(1)
+        _eventClickReset.setValue(Unit)
     }
 
     val clickBackListener = View.OnClickListener {
-        _eventClickBack.setValue(1)
+        _eventClickBack.setValue(Unit)
     }
 
-    val emailTextWatcher = object: TextWatcher {
+    val emailTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            _eventTextFieldChanged.setValue(1)
+            _eventTextFieldChanged.setValue(Unit)
         }
 
         override fun afterTextChanged(s: Editable?) {}

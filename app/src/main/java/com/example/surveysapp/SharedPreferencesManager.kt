@@ -40,7 +40,8 @@ class SharedPreferencesManager @Inject constructor(@ApplicationContext context: 
         authAttributes.accessToken?.let { putToken(PREF_KEY_ENCRYPTED_ACCESS_TOKEN, it) }
         authAttributes.refreshToken?.let { putToken(PREF_KEY_ENCRYPTED_REFRESH_TOKEN, it) }
         if (authAttributes.expiresIn != null && authAttributes.createdAt != null) {
-            val expiredTime = (authAttributes.expiresIn + authAttributes.createdAt) * 1000 // Convert expireTime from sec to milli sec
+            val expiredTime =
+                (authAttributes.expiresIn + authAttributes.createdAt) * 1000 // Convert expireTime from sec to milli sec
             putExpireTime(expiredTime)
         }
     }
@@ -118,7 +119,7 @@ class SharedPreferencesManager @Inject constructor(@ApplicationContext context: 
      */
     fun getAccessToken(): String {
         val encryptedToken = prefs.getString(PREF_KEY_ENCRYPTED_ACCESS_TOKEN, "")
-        return AESCrypt.decrypt(encryptedToken ?: "", TOKEN_CRYPT_KEY)
+        return AESCrypt.decrypt(encryptedToken.orEmpty(), TOKEN_CRYPT_KEY)
     }
 
     /**
@@ -127,7 +128,7 @@ class SharedPreferencesManager @Inject constructor(@ApplicationContext context: 
      */
     fun getRefreshToken(): String {
         val encryptedToken = prefs.getString(PREF_KEY_ENCRYPTED_REFRESH_TOKEN, "")
-        return AESCrypt.decrypt(encryptedToken ?: "", TOKEN_CRYPT_KEY)
+        return AESCrypt.decrypt(encryptedToken.orEmpty(), TOKEN_CRYPT_KEY)
     }
 
     /**

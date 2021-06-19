@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.surveysapp.SharedPreferencesManager
-import com.example.surveysapp.mapper.AuthAttributesMapper
+import com.example.surveysapp.entity.toModel
 import com.example.surveysapp.model.AuthAttributes
 import com.example.surveysapp.other.SingleEventLiveData
 import com.example.surveysapp.other.ViewState
@@ -38,30 +38,30 @@ class LoginViewModel @Inject constructor(
     val isEnableLoading: LiveData<Boolean> = _isEnableLoading
 
     //The single LiveData represents for click events
-    private val _eventClickLogIn by lazy { SingleEventLiveData<Int>() }
-    val eventClickLogIn: LiveData<Int> = _eventClickLogIn
+    private val _eventClickLogIn by lazy { SingleEventLiveData<Unit>() }
+    val eventClickLogIn: LiveData<Unit> = _eventClickLogIn
 
-    private val _eventTextFieldChanged by lazy { SingleEventLiveData<Int>() }
-    val eventTextFieldChanged: LiveData<Int> = _eventTextFieldChanged
+    private val _eventTextFieldChanged by lazy { SingleEventLiveData<Unit>() }
+    val eventTextFieldChanged: LiveData<Unit> = _eventTextFieldChanged
 
-    private val _eventClickReset by lazy { SingleEventLiveData<Int>() }
-    val eventClickReset: LiveData<Int> = _eventClickReset
+    private val _eventClickReset by lazy { SingleEventLiveData<Unit>() }
+    val eventClickReset: LiveData<Unit> = _eventClickReset
 
     //On-click events are set to view through data-binding
     //Sets LiveData value to notify to Fragment/Activity
     val clickLoginListener = View.OnClickListener {
-        _eventClickLogIn.setValue(1)
+        _eventClickLogIn.setValue(Unit)
     }
 
     val clickResetListener = View.OnClickListener {
-        _eventClickReset.setValue(1)
+        _eventClickReset.setValue(Unit)
     }
 
-    val loginTextWatcher = object: TextWatcher {
+    val loginTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            _eventTextFieldChanged.setValue(1)
+            _eventTextFieldChanged.setValue(Unit)
         }
 
         override fun afterTextChanged(s: Editable?) {}
@@ -78,7 +78,7 @@ class LoginViewModel @Inject constructor(
             // Check if there is any error occur
             if (response.data != null) {
                 // Parse data and post value to view
-                val data = AuthAttributesMapper.transform(response.data.attributes)
+                val data = response.data.attributes.toModel()
                 _loginDataFlow.postValue(ViewState.Success(data))
 
                 // Save data to local
