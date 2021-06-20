@@ -12,12 +12,25 @@ import retrofit2.Response
 data class BaseEntity<T>(
     @SerializedName("data")
     val data: T? = null,
-    val error: ErrorEntity? = null
+    val error: ErrorEntity? = null,
+    @SerializedName("meta")
+    val meta: Meta? = null
 )
 
 data class BaseException(
     @SerializedName("errors")
     val errors: List<ErrorEntity>? = null
+)
+
+data class Meta(
+    @SerializedName("page")
+    val page: Int? = 0,
+    @SerializedName("pages")
+    val pages: Int? = 0,
+    @SerializedName("page_size")
+    val pageSize: Int? = 0,
+    @SerializedName("records")
+    val records: Int? = 0
 )
 
 /**

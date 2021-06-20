@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.example.surveysapp.R
 import com.example.surveysapp.databinding.FragmentHomeBinding
+import com.example.surveysapp.other.EndlessScrollListener
 import com.example.surveysapp.other.ViewState
 import com.example.surveysapp.util.Utils
 import com.example.surveysapp.view.adapter.SurveySlidePagerAdapter
@@ -44,6 +45,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         private const val DRAWER_WIDTH_PERCENTAGE = 0.65
     }
 
+    // Listener to notifies whenever user reach the bottom and need load more items
+    private var endlessScrollListener =
+        object : EndlessScrollListener(sliderAdapter) {
+            override fun onLoadMore() {
+                viewModel.getSurveyList()
+            }
+        }
+
     // Listener for cover page change event
     private val coverPageChangeListener = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
@@ -57,7 +66,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private val refreshListener = SwipeRefreshLayout.OnRefreshListener {
         // Only fetch when internet connection is available
         if (Utils.isNetworkAvailable(applicationContext)) {
-            viewModel.getSurveyList()
+            viewModel.onRefresh()
         } else {
             binding.includeHome.refreshLayout.isRefreshing = false
         }
@@ -77,6 +86,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             }
         }
 
+        setupDrawerLayout()
+        setupViewpager()
+
+        observeEvents()
+
         if (!Utils.isNetworkAvailable(applicationContext)) {
             viewModel.apply {
                 querySurveyFromLocal()
@@ -85,11 +99,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         } else if (viewModel.surveys.value == null) { // Prevents reload when back from backstack
             viewModel.getSurveyList()
         }
-
-        setupDrawerLayout()
-        setupViewpager()
-
-        observeEvents()
     }
 
     private fun setupDrawerLayout() {
@@ -118,6 +127,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             }.attach()
 
             registerOnPageChangeCallback(coverPageChangeListener)
+            registerOnPageChangeCallback(endlessScrollListener)
         }
     }
 
@@ -126,21 +136,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             surveys.observe(viewLifecycleOwner) { response ->
                 when (response) {
                     is ViewState.Loading -> {
-                        if (!binding.includeHome.refreshLayout.isRefreshing) {
+                        if (!binding.includeHome.refreshLayout.isRefreshing && !isLoadMore) {
                             setLoadingEnable(true)
                         }
                     }
                     is ViewState.Success -> {
-                        binding.includeHome.refreshLayout.isRefreshing = false
-                        setLoadingEnable(false)
                         sliderAdapter.submitList(response.value)
+                        if (!isLoadMore) {
+                            binding.includeHome.indicatorTabLayout.getTabAt(0)?.select()
+                        }
+                        onFetchFinish()
                     }
                     is ViewState.Error -> {
-                        binding.includeHome.refreshLayout.isRefreshing = false
-                        setLoadingEnable(false)
                         // Get local data if fetch from server was failed
                         viewModel.querySurveyFromLocal()
+                        onFetchFinish()
                     }
+                }
+            }
+
+            // LiveData to notifies the list has more data from server or not
+            // if yes then set up for endless load feature on viewPager
+            // if no then remove that feature from viewPager since it isn't necessary
+            hasNextPage.observe(viewLifecycleOwner) { hasNextPage ->
+                // Removes current listener
+                binding.includeHome.vpgCover.unregisterOnPageChangeCallback(endlessScrollListener)
+
+                if (hasNextPage) {
+                    binding.includeHome.vpgCover.registerOnPageChangeCallback(endlessScrollListener)
+                    endlessScrollListener.setLoadingFinished()
                 }
             }
 
@@ -180,6 +204,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 }
             }
         }
+    }
+
+    /**
+     * Do things that are needed after finished fetch new data
+     */
+    private fun onFetchFinish() {
+        binding.includeHome.refreshLayout.isRefreshing = false
+        viewModel.setLoadingEnable(false)
+        endlessScrollListener.setLoadingFinished()
     }
 
     private fun navigateToSurveyDetail() {

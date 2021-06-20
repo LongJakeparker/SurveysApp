@@ -24,4 +24,5 @@
     <dimen name="indicator_size">4dp</dimen>
     <dimen name="height_loading_holder_view">18dp</dimen>
     <dimen name="size_avatar">50dp</dimen>
+    <dimen name="survey_title_height">64dp</dimen>
 </resources>

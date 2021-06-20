@@ -40,8 +40,8 @@ class SurveyRepository @Inject constructor(
      * Inserts all surveys into Room database
      * @param issues
      */
-    suspend fun insertSurveys(issues: List<SurveyRoomEntity?>?) {
-        return surveyDao.insertSurveys(issues)
+    suspend fun insertSurveys(issues: List<SurveyRoomEntity?>?, isLoadMore: Boolean = false) {
+        return surveyDao.insertSurveys(issues, isLoadMore)
     }
 
     /**
