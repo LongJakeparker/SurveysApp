@@ -5,7 +5,6 @@ package com.example.surveysapp.other
  * @since 13/06/2021
  */
 object Constant {
-    const val BASE_URL = "https://survey-api.nimblehq.co/"
     const val AUTHORIZATION = "Authorization"
     const val URL_SEGMENT_REFRESH_TOKEN = "token"
 }

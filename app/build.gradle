@@ -5,11 +5,17 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs.kotlin'
 }
+apply from: "../configOutput.gradle"
+
+def keystorePropertiesFile = rootProject.file("app/keystore.properties")
+
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
-
+    flavorDimensions "versionCode"
     defaultConfig {
         applicationId "com.example.surveysapp"
         minSdkVersion 21
@@ -20,18 +26,52 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes.each {
-        // Modify your own keys in Gradle.properties file
-        it.buildConfigField 'String', 'client_id', client_id
-        it.buildConfigField 'String', 'client_secret', client_secret
+    signingConfigs {
+        debug {
+            storeFile file(getProjectDir().getPath() + '/debugKey.jks')
+            keyAlias 'androidDebug'
+            keyPassword '123456'
+            storePassword '123456'
+        }
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(getProjectDir().getPath() + "/" + keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
     }
 
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
+
+    productFlavors {
+        staging {
+            applicationId "com.example.surveysapp.staging"
+            versionCode rootProject.ext.versionCodeDev
+            versionName rootProject.ext.versionName
+            buildConfigField 'String', 'client_id', stg_client_id
+            buildConfigField 'String', 'client_secret', stg_client_secret
+            buildConfigField 'String', 'BASE_URL', '"https://nimble-survey-web-staging.herokuapp.com/"'
+        }
+
+        product {
+            applicationId "com.example.surveysapp.android"
+            versionCode rootProject.ext.versionCode
+            versionName rootProject.ext.versionName
+            buildConfigField 'String', 'client_id', client_id
+            buildConfigField 'String', 'client_secret', client_secret
+            buildConfigField 'String', 'BASE_URL', '"https://survey-api.nimblehq.co/"'
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

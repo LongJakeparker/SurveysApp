@@ -1,6 +1,7 @@
 package com.example.surveysapp.other
 
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -17,6 +18,7 @@ import com.example.surveysapp.R
 
 @BindingAdapter("android:avatarUrl")
 fun setAvatarUrl(imageView: ImageView, url: String?) {
+    Log.d("Bind avatar", imageView.toString())
     imageView.load(url) {
         crossfade(true)
         transformations(CircleCropTransformation())

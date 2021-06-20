@@ -1,0 +1,11 @@
+android.applicationVariants.all { variant ->
+
+    variant.outputs.all { output ->
+        String outputName = output.baseName
+        def newName = "SurveysApp-${outputName}-${versionName}-v${versionCode}.apk"
+        if (!output.zipAlign) {
+            newName = newName.replace("unaligned", "")
+        }
+        output.outputFileName = newName
+    }
+}

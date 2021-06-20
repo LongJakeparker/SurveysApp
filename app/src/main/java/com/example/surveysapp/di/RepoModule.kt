@@ -47,7 +47,7 @@ object RepoModule {
     annotation class NonAuthRetrofit
 
     @Provides
-    fun provideBaseUrl() = Constant.BASE_URL
+    fun provideBaseUrl() = BuildConfig.BASE_URL
 
     @AuthOkHttpClient
     @Singleton
