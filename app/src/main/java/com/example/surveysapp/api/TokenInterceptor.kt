@@ -3,6 +3,7 @@ package com.example.surveysapp.api
 import com.example.surveysapp.SharedPreferencesManager
 import com.example.surveysapp.entity.toModel
 import com.example.surveysapp.other.Constant
+import com.example.surveysapp.request.RefreshTokenRequest
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.util.*
@@ -37,7 +38,7 @@ class TokenInterceptor @Inject constructor(
 
             if (compareDateResult == -1) { // Token has expired
                 val result =
-                    nonAuthApiService.refreshToken(sharedPreferencesManager.getRefreshToken())
+                    nonAuthApiService.refreshToken(RefreshTokenRequest(sharedPreferencesManager.getRefreshToken()))
                         .execute()
                 if (result.isSuccessful) {
                     // refresh token is successful, we saved new token to storage.

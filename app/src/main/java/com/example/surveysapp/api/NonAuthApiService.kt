@@ -1,15 +1,15 @@
 package com.example.surveysapp.api
 
-import com.example.surveysapp.BuildConfig
 import com.example.surveysapp.entity.AuthEntity
 import com.example.surveysapp.entity.BaseEntity
-import com.example.surveysapp.other.ApiKey
+import com.example.surveysapp.request.ForgotPasswordRequest
+import com.example.surveysapp.request.LoginRequest
+import com.example.surveysapp.request.LogoutRequest
+import com.example.surveysapp.request.RefreshTokenRequest
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 /**
@@ -17,33 +17,15 @@ import retrofit2.http.POST
  * @since 13/06/2021
  */
 interface NonAuthApiService {
-    @FormUrlEncoded
     @POST("api/v1/oauth/token")
-    suspend fun login(
-        @Field(ApiKey.EMAIL) email: String,
-        @Field(ApiKey.PASSWORD) password: String,
-        @Field(ApiKey.GRANT_TYPE) grantType: String? = "password",
-        @Field(ApiKey.CLIENT_ID) clientId: String? = BuildConfig.client_id,
-        @Field(ApiKey.CLIENT_SECRET) clientSecret: String? = BuildConfig.client_secret
-    ): Response<BaseEntity<AuthEntity>>
+    suspend fun login(@Body body: LoginRequest): Response<BaseEntity<AuthEntity>>
 
-    @FormUrlEncoded
     @POST("api/v1/oauth/token")
-    fun refreshToken(
-        @Field(ApiKey.REFRESH_TOKEN) refreshToken: String,
-        @Field(ApiKey.GRANT_TYPE) grantType: String? = "refresh_token",
-        @Field(ApiKey.CLIENT_ID) clientId: String? = BuildConfig.client_id,
-        @Field(ApiKey.CLIENT_SECRET) clientSecret: String? = BuildConfig.client_secret
-    ): Call<BaseEntity<AuthEntity>>
+    fun refreshToken(@Body body: RefreshTokenRequest): Call<BaseEntity<AuthEntity>>
 
-    @FormUrlEncoded
     @POST("api/v1/oauth/revoke")
-    suspend fun logout(
-        @Field(ApiKey.TOKEN) accessToken: String,
-        @Field(ApiKey.CLIENT_ID) clientId: String? = BuildConfig.client_id,
-        @Field(ApiKey.CLIENT_SECRET) clientSecret: String? = BuildConfig.client_secret
-    ): Response<ResponseBody>
+    suspend fun logout(@Body body: LogoutRequest): Response<ResponseBody>
 
     @POST("api/v1/passwords")
-    suspend fun forgotPassword(@Body params: HashMap<String, Any>): Response<ResponseBody>
+    suspend fun forgotPassword(@Body body: ForgotPasswordRequest): Response<ResponseBody>
 }

@@ -3,6 +3,7 @@ package com.example.surveysapp.api
 import com.example.surveysapp.SharedPreferencesManager
 import com.example.surveysapp.entity.toModel
 import com.example.surveysapp.other.Constant
+import com.example.surveysapp.request.RefreshTokenRequest
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
@@ -30,7 +31,7 @@ class TokenAuthenticator @Inject constructor(
         }
 
         val result =
-            nonAuthApiService.refreshToken(sharedPreferencesManager.getRefreshToken()).execute()
+            nonAuthApiService.refreshToken(RefreshTokenRequest(sharedPreferencesManager.getRefreshToken())).execute()
 
         return if (result.isSuccessful) {
             // refresh token is successful, we saved new token to storage.
