@@ -53,6 +53,7 @@
 # Application classes that will be serialized/deserialized over Gson
 -keep class com.google.gson.examples.android.model.** { *; }
 -keep class com.example.surveysapp.entity.** { *; }
+-keep class com.example.surveysapp.request.** { *; }
 
 # Coroutines
 # ServiceLoader support
