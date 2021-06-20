@@ -36,25 +36,27 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         get() = ActivitySplashBinding::inflate
 
     override fun onBindingReady() {
-        binding.ivLogo.animate().alpha(1f).setDuration(LOGO_ANIMATION_DURATION)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    // Check whether user have already logged in or not
-                    if (sharedPreferencesManager.getAccessToken().isEmpty()) {
-                        navigateToLogin()
-                    } else {
-                        navigateToMain()
+        Handler(mainLooper).postDelayed({
+            binding.ivLogo.animate().alpha(1f).setDuration(LOGO_ANIMATION_DURATION)
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        // Check whether user have already logged in or not
+                        if (sharedPreferencesManager.getAccessToken().isEmpty()) {
+                            navigateToLogin()
+                        } else {
+                            navigateToMain()
+                        }
                     }
-                }
-            })
-            .setInterpolator(AccelerateInterpolator()).start()
+                })
+                .setInterpolator(AccelerateInterpolator()).start()
+        }, LOGO_ANIMATION_DURATION)
     }
 
     private fun navigateToMain() {
         // Needs delay a little bit because the animation finish too fast if don't have shared element
         Handler(mainLooper).postDelayed({
             MainActivity.start(this)
-        }, 1000)
+        }, LOGO_ANIMATION_DURATION)
     }
 
     private fun navigateToLogin() {
@@ -67,9 +69,23 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                 getString(R.string.text_transition_logo)
             )
 
+        val shareBackgroundImage =
+            Pair<View, String>(
+                binding.ivBackground,
+                getString(R.string.text_transition_background)
+            )
+
+        val shareBackgroundOverlay =
+            Pair<View, String>(
+                binding.ivOverlay,
+                getString(R.string.text_transition_background)
+            )
+
         val option = ActivityOptions.makeSceneTransitionAnimation(
             this@SplashActivity,
-            shareLogoImage
+            shareLogoImage,
+            shareBackgroundImage,
+            shareBackgroundOverlay
         )
 
         startActivity(intent, option.toBundle())

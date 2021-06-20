@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.example.surveysapp.databinding.ItemSurveyCoverBinding
 import com.example.surveysapp.model.Survey
 
@@ -28,13 +27,20 @@ class SurveySlidePagerAdapter : ListAdapter<
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as IssueViewHolder).binding.ivCoverImage.load(getItem(position).coverImageUrl) {
-            crossfade(true)
-        }
+        (holder as IssueViewHolder).onBind(getItem(position))
     }
 
     class IssueViewHolder(val binding: ItemSurveyCoverBinding) :
-        RecyclerView.ViewHolder(binding.root)
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun onBind(item: Survey) {
+            binding.apply {
+                survey = item
+                executePendingBindings()
+            }
+        }
+
+    }
 
     /**
      * DiffUtil.ItemCallback of Survey

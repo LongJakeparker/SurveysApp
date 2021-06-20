@@ -25,6 +25,13 @@ fun setAvatarUrl(imageView: ImageView, url: String?) {
     }
 }
 
+@BindingAdapter("android:imageUrl")
+fun setImageUrl(imageView: ImageView, url: String?) {
+    imageView.load(url) {
+        crossfade(true)
+    }
+}
+
 @BindingAdapter("android:textWatcher")
 fun setTextWatcher(view: EditText, textWatcher: TextWatcher) {
     view.addTextChangedListener(textWatcher)
