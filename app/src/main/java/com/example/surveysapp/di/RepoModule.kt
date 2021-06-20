@@ -7,7 +7,6 @@ import com.example.surveysapp.api.AuthApiService
 import com.example.surveysapp.api.NonAuthApiService
 import com.example.surveysapp.api.TokenAuthenticator
 import com.example.surveysapp.api.TokenInterceptor
-import com.example.surveysapp.other.Constant
 import com.example.surveysapp.room.AppDatabase
 import com.example.surveysapp.room.SurveyDao
 import dagger.Module

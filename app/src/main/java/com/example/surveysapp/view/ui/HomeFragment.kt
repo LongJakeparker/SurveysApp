@@ -11,8 +11,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
-import coil.load
-import coil.transform.CircleCropTransformation
 import com.example.surveysapp.R
 import com.example.surveysapp.databinding.FragmentHomeBinding
 import com.example.surveysapp.other.ViewState
