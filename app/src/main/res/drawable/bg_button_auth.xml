@@ -11,7 +11,7 @@
     <item>
         <shape>
 
-            <solid android:color="@color/light_black" />
+            <solid android:color="@color/white" />
             <corners android:radius="@dimen/view_dimen_ms" />
 
         </shape>

@@ -2,6 +2,7 @@
     <string name="app_name">SurveysApp</string>
 
     <string name="text_transition_logo">transition_logo</string>
+    <string name="text_transition_background">transition_background</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="label_login">Log in</string>

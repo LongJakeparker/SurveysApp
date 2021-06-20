@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import androidx.activity.viewModels
 import com.example.surveysapp.R
 import com.example.surveysapp.databinding.ActivityLoginBinding
+import com.example.surveysapp.other.CustomPasswordTransformationMethod
 import com.example.surveysapp.other.ViewState
 import com.example.surveysapp.other.isValidEmail
 import com.example.surveysapp.util.Utils
@@ -37,6 +38,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         binding.apply {
             viewModel = this@LoginActivity.viewModel
             lifecycleOwner = this@LoginActivity
+
+            etPassword.transformationMethod = CustomPasswordTransformationMethod()
         }
 
         observeEvents()

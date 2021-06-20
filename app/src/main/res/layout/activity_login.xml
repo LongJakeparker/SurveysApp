@@ -15,29 +15,36 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivLogo"
-            android:layout_width="@dimen/logo_width_login"
+            android:id="@+id/ivBackground"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:transitionName="@string/text_transition_logo"
-            app:layout_constraintBottom_toTopOf="@id/etEmail"
-            app:layout_constraintDimensionRatio="240:99"
+            android:scaleType="centerCrop"
+            android:transitionName="@string/text_transition_background"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo_nimble" />
+            app:srcCompat="@drawable/bg_login" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:transitionName="@string/text_transition_logo"
+            app:layout_constraintBottom_toTopOf="@id/etEmail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo_white_small" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etEmail"
+            style="@style/Edittext"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/view_dimen_ml"
-            android:background="@drawable/bg_edittext_auth"
             android:hint="@string/hint_email"
             android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:padding="@dimen/view_dimen_m"
-            android:textColorHint="@color/color_hint"
-            android:textSize="@dimen/text_size_medium"
             android:textWatcher="@{viewModel.loginTextWatcher}"
             app:layout_constraintBottom_toTopOf="@id/llPassword"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,6 +67,7 @@
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etPassword"
+                style="@style/Edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/view_dimen_s"
@@ -67,10 +75,6 @@
                 android:background="@null"
                 android:hint="@string/hint_password"
                 android:inputType="textPassword"
-                android:maxLines="1"
-                android:padding="@dimen/view_dimen_m"
-                android:textColorHint="@color/color_hint"
-                android:textSize="@dimen/text_size_medium"
                 android:textWatcher="@{viewModel.loginTextWatcher}" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -80,7 +84,7 @@
                 android:onClick="@{viewModel.clickResetListener}"
                 android:paddingHorizontal="@dimen/view_dimen_m"
                 android:text="@string/label_forgot"
-                android:textColor="@color/light_black" />
+                android:textColor="@color/white_50" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -96,7 +100,7 @@
             android:paddingVertical="@dimen/view_dimen_m"
             android:text="@string/label_login"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="@dimen/text_size_large"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -108,7 +112,6 @@
             android:layout_height="0dp"
             android:background="@drawable/bg_button_auth"
             android:elevation="@dimen/view_dimen_xs"
-            android:indeterminateTint="@color/white"
             android:onClick="@{null}"
             android:paddingVertical="@dimen/view_dimen_ms"
             android:viewVisible="@{viewModel.isEnableLoading}"
