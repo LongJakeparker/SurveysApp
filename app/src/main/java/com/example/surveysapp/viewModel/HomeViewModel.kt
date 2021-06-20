@@ -128,6 +128,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun getProfileFromLocal() = sharedPreferencesManager.getProfile()?.let {
+        _profile.postValue(it)
+    }
+
     fun setCurrentItem(survey: Survey) {
         _currentItem.value = survey
     }
