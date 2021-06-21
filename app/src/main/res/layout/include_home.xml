@@ -54,15 +54,16 @@
                     android:layout_marginEnd="@dimen/view_dimen_ml"
                     android:background="@null"
                     android:translationX="-6dp"
+                    app:layout_constrainedWidth="true"
                     app:layout_constraintBottom_toTopOf="@id/tvSurveyTitle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toStartOf="@id/tvSurveyTitle"
                     app:tabBackground="@drawable/tab_selector"
                     app:tabGravity="center"
+                    app:tabMaxWidth="@dimen/view_dimen_m"
                     app:tabIndicatorHeight="0dp"
-                    app:tabMode="fixed"
-                    app:tabPaddingStart="6dp" />
+                    app:tabMode="auto"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvDate"
@@ -98,7 +99,7 @@
                     android:padding="@dimen/view_dimen_s"
                     app:layout_constraintBottom_toBottomOf="@id/tvToday"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tvToday"/>
+                    app:layout_constraintTop_toTopOf="@id/tvToday" />
 
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -124,7 +125,7 @@
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tvSurveyTitle"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/survey_title_height"
                     android:layout_marginEnd="@dimen/view_dimen_ml"
                     android:layout_marginBottom="@dimen/view_dimen_m"
                     android:ellipsize="end"

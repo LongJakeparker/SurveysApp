@@ -35,6 +35,11 @@ class HomeViewModel @Inject constructor(
     private val sharedPreferencesManager: SharedPreferencesManager
 ) : ViewModel() {
 
+    private var currentPage = 0
+    private var currentList = ArrayList<Survey>()
+    val isLoadMore
+        get() = currentPage > 1
+
     //The data flows
     private val _surveys by lazy { MutableLiveData<ViewState<List<Survey>>>() }
     val surveys: LiveData<ViewState<List<Survey>>> = _surveys
@@ -47,6 +52,10 @@ class HomeViewModel @Inject constructor(
 
     private val _profile by lazy { MutableLiveData<Profile>() }
     val profile: LiveData<Profile> = _profile
+
+    private val _hasNextPage by lazy { MutableLiveData(false) }
+    val hasNextPage: LiveData<Boolean>
+        get() = _hasNextPage
 
     private val _currentItem by lazy { MutableLiveData<Survey>() }
     val currentItem: LiveData<Survey> = _currentItem
@@ -72,21 +81,38 @@ class HomeViewModel @Inject constructor(
         _eventClickDetail.setValue(Unit)
     }
 
+    fun onRefresh() {
+        currentPage = 0
+        getSurveyList()
+    }
 
     fun getSurveyList() = viewModelScope.launch {
         // Start loading
         _surveys.postValue(ViewState.Loading())
         try {
-            val response = surveyRepository.getSurveyList()
+            val response = surveyRepository.getSurveyList(++currentPage)
 
             // Gets profile and binds
             getProfile()
 
             // Checks if there is any error occur
             if (response.data != null) {
+                // Keep data served for paging
+                response.meta?.apply {
+                    page?.let { currentPage = it }
+                    pages?.let { _hasNextPage.postValue(currentPage < it) }
+                }
+
                 // Parses data and posts value to view
                 val responseData = response.data.toModelList()
-                _surveys.postValue(ViewState.Success(responseData))
+
+                if (!isLoadMore) {
+                    currentList = ArrayList(responseData)
+                } else {
+                    currentList.addAll(responseData)
+                }
+
+                _surveys.postValue(ViewState.Success(ArrayList(currentList)))
                 updateToRoom(responseData)
             } else {
                 // Handles error
@@ -99,7 +125,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun updateToRoom(responseData: List<Survey>) {
-        surveyRepository.insertSurveys(responseData.toRoomEntityList())
+        surveyRepository.insertSurveys(responseData.toRoomEntityList(), isLoadMore)
     }
 
     private suspend fun getProfile() {
