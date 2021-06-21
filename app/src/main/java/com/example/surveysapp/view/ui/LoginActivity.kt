@@ -8,7 +8,6 @@ import com.example.surveysapp.R
 import com.example.surveysapp.databinding.ActivityLoginBinding
 import com.example.surveysapp.other.CustomPasswordTransformationMethod
 import com.example.surveysapp.other.ViewState
-import com.example.surveysapp.other.isValidEmail
 import com.example.surveysapp.util.Utils
 import com.example.surveysapp.view.ui.base.BaseActivity
 import com.example.surveysapp.viewModel.LoginViewModel
@@ -78,7 +77,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                 // Validate data to enable/disable whenever email or password field is changed
                 val email = binding.etEmail.text.toString().trim()
                 val password = binding.etPassword.text.toString().trim()
-                binding.btnLogin.isEnabled = email.isValidEmail() && password.isNotEmpty()
+                binding.btnLogin.isEnabled = validateData(email, password)
             }
 
             eventClickReset.observe(this@LoginActivity) {
