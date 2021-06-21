@@ -12,6 +12,7 @@ import com.example.surveysapp.entity.toModel
 import com.example.surveysapp.model.AuthAttributes
 import com.example.surveysapp.other.SingleEventLiveData
 import com.example.surveysapp.other.ViewState
+import com.example.surveysapp.other.isValidEmail
 import com.example.surveysapp.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -66,6 +67,8 @@ class LoginViewModel @Inject constructor(
 
         override fun afterTextChanged(s: Editable?) {}
     }
+
+    fun validateData(email: String, password: String) = email.isValidEmail() && password.isNotEmpty()
 
     fun login(email: String, password: String) = viewModelScope.launch {
         // Start loading

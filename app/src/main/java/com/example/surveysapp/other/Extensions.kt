@@ -1,6 +1,6 @@
 package com.example.surveysapp.other
 
-import android.util.Patterns
+import androidx.core.util.PatternsCompat
 
 /**
  * @author longtran
@@ -8,4 +8,5 @@ import android.util.Patterns
  */
 
 // An extension uses to validate an email
-fun String?.isValidEmail() = !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
+fun String?.isValidEmail() =
+    !isNullOrEmpty() && PatternsCompat.EMAIL_ADDRESS.matcher(this).matches()
